@@ -1,14 +1,16 @@
 
+using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Persistance.Data;
+using Persistance.Data.DataSeeding;
 
 namespace E_Commerce
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +29,16 @@ namespace E_Commerce
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
             });
 
+            // 2. DI for the dataseeding
+            builder.Services.AddScoped<IDbInitializer,DbInitializer>();
+
             //............................................................
 
             var app = builder.Build();
+
+            // 3. Call the function for dataseeding
+            // Main returns 'Task' not void since has async function
+            await InitializeDbAsync(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,6 +55,16 @@ namespace E_Commerce
             app.MapControllers();
 
             app.Run();
+
+
+            // Function to be able to call the dataseeding. before even making any request. INstead of clr creating it
+            async Task InitializeDbAsync(WebApplication app)
+            {
+                using var scope= app.Services.CreateScope();
+                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                await dbInitializer.InitializeAync(); // call the method in the interface/ class you created
+
+            }
         }
     }
 }
