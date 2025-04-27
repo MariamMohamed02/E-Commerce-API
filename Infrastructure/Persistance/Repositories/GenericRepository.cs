@@ -30,7 +30,7 @@ namespace Persistance.Repositories
             _dbContext.Set<TEntity>().Update(entity);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(bool asNoTracking)=> asNoTracking?
+        public async Task<IEnumerable<TEntity>> GetAllAsync(bool asNoTracking=false)=> asNoTracking?
             await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync() //true
             : await _dbContext.Set<TEntity>().ToListAsync();  //false
 
