@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Persistance.Data;
 using Persistance.Data.DataSeeding;
+using Persistance.Repositories;
 
 namespace E_Commerce
 {
@@ -31,6 +32,11 @@ namespace E_Commerce
 
             // 2. DI for the dataseeding
             builder.Services.AddScoped<IDbInitializer,DbInitializer>();
+
+            //3. 
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            // 4. 
+            builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
 
             //............................................................
 
