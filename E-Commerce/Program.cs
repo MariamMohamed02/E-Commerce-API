@@ -59,6 +59,10 @@ namespace E_Commerce
                 app.UseSwaggerUI();
             }
 
+            // 6. -- To Use the Images --
+            app.UseStaticFiles();
+
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
