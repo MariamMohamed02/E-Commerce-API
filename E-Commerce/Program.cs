@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using Persistance.Data;
 using Persistance.Data.DataSeeding;
 using Persistance.Repositories;
+using Services;
+using Services.Abstraction;
 
 namespace E_Commerce
 {
@@ -17,7 +19,8 @@ namespace E_Commerce
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            // -------------modeified here to be able to use the controllers in the entire solutin and not just the API project
+            builder.Services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -37,6 +40,9 @@ namespace E_Commerce
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             // 4. 
             builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
+
+            //5. 
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
             //............................................................
 
