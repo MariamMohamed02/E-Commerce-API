@@ -1,5 +1,6 @@
 
 using Domain.Contracts;
+using E_Commerce.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -47,6 +48,9 @@ namespace E_Commerce
             //............................................................
 
             var app = builder.Build();
+
+            // USe middle ware
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
             // 3. Call the function for dataseeding
             // Main returns 'Task' not void since has async function
