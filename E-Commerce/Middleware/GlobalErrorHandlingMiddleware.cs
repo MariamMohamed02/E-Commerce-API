@@ -22,6 +22,9 @@ namespace E_Commerce.Middleware
             try
             {
                 await _next(httpContext);
+                // Incorrect controller (doesnt throw an exception therefore wont be called from inside the catch therefore write here)
+                if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
+                    await HandleNotFoundApiAsync(httpContext);
             }
             catch (Exception ex) {
                 //log exception
@@ -30,6 +33,17 @@ namespace E_Commerce.Middleware
                 await HandleExceptionAsync(httpContext, ex);
             }
 
+        }
+
+        private async Task HandleNotFoundApiAsync(HttpContext httpContext)
+        {
+            httpContext.Response.ContentType = "application/json";
+            var response= new ErrorDetails
+            {
+                StatusCode=(int)HttpStatusCode.NotFound,
+                ErrorMessage= $"The EndPoint {httpContext.Request.Path} not correct"
+            }.ToString();
+            await httpContext.Response.WriteAsync(response);
         }
 
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
