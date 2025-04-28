@@ -35,10 +35,11 @@ namespace Services.Specifications
         // Filter based on brandid. productid, both or none
         // To be able to use orderby, it has to be a collection
         // sort by price or by name (asc or desc)  -> 4 cases
-        public ProductWithBrandAndTypeSpecifications(ProductParametersSpecification parameters)
+        public ProductWithBrandAndTypeSpecifications(ProductSpecificationParameters parameters)
             : base(product=>
             (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) &&
-            (!parameters.TypedId.HasValue || product.TypeId== parameters.TypedId.Value)
+            (!parameters.TypedId.HasValue || product.TypeId== parameters.TypedId.Value)&&
+            (string.IsNullOrWhiteSpace(parameters.Search) || product.Name.ToLower().Contains(parameters.Search.ToLower().Trim()))
             )
         {
             AddInclude(product => product.ProductBrand);

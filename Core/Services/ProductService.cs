@@ -23,7 +23,7 @@ namespace Services
             return brandsResult;
         }
 
-        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductParametersSpecification parameters)
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductSpecificationParameters parameters)
         {
             var products= await _unitOfWork.GetRepository<Product,int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications( parameters));
             var totalCount = await _unitOfWork.GetRepository<Product, int>().CountAsync(new ProductCountSpecifications(parameters));

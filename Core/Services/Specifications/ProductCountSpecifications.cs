@@ -8,10 +8,12 @@ namespace Services.Specifications
 {
     public class ProductCountSpecifications: Specifications<Product>
     {
-        public ProductCountSpecifications(ProductParametersSpecification parameters)
+        public ProductCountSpecifications(ProductSpecificationParameters parameters)
            : base(product =>
            (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) &&
-           (!parameters.TypedId.HasValue || product.TypeId == parameters.TypedId.Value)
+           (!parameters.TypedId.HasValue || product.TypeId == parameters.TypedId.Value)&&
+           (string.IsNullOrWhiteSpace(parameters.Search) || product.Name.ToLower().Contains(parameters.Search.ToLower().Trim()))
+
            )
         {
            
