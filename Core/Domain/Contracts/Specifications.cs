@@ -21,7 +21,15 @@ namespace Domain.Contracts
         protected void AddInclude(Expression<Func<T, object>> expression)
             => IncludeExpressions.Add(expression);
 
+        // ---------- SORTING and FILTERING ---------------
+        public Expression<Func<T,object>> OrderBy { get; private set; }
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
+        protected void SetOrderBy(Expression<Func<T, object>> expression)
+            => OrderBy=expression;
+
+        protected void SetOrderByDescending(Expression<Func<T, object>> expression)
+            => OrderByDescending = expression;
     }
 }
 

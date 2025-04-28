@@ -29,5 +29,41 @@ namespace Services.Specifications
             AddInclude(product => product.ProductType);
         }
 
+
+        // Sorting
+        // Filter based on brandid. productid, both or none
+        // To be able to use orderby, it has to be a collection
+        // sort by price or by name (asc or desc)  -> 4 cases
+        public ProductWithBrandAndTypeSpecifications(string? sort , int? brandId, int? typeId)
+            : base(product=>
+            (!brandId.HasValue || product.BrandId == brandId.Value) &&
+            (!typeId.HasValue || product.TypeId== typeId.Value)
+            )
+        {
+            AddInclude(product => product.ProductBrand);
+            AddInclude(product => product.ProductType);
+            if (!string.IsNullOrWhiteSpace(sort)) 
+            {
+                switch (sort.ToLower().Trim())
+                {
+                    case "pricedesc":
+                        SetOrderByDescending(p => p.Price);
+                        break;
+                    case "priceasc":
+                        SetOrderBy(p => p.Price);
+                        break;
+                    case "namedesc":
+                        SetOrderByDescending(p => p.Name);
+                        break;
+                    default:
+                        SetOrderBy(p => p.Name);
+                        break;
+
+                }
+            }
+        }
+
+
+
     }
 }
