@@ -1,5 +1,6 @@
 
 using Domain.Contracts;
+using E_Commerce.Extensions;
 using E_Commerce.Factories;
 using E_Commerce.Middleware;
 using Microsoft.AspNetCore.Mvc;
@@ -18,52 +19,30 @@ namespace E_Commerce
     {
         public static async Task Main(string[] args)
         {
+            #region Services
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            // -------------modeified here to be able to use the controllers in the entire solutin and not just the API project
-            builder.Services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // Presentation Services
+            builder.Services.AddPresentationServices();
 
 
-            // ADDED HERE ...............................................
-            // 1.Connect to Database and allow DI for the DbContext
-            builder.Services.AddDbContext<AppDbContext>(
-                options => { 
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-            });
+            // Infrastructure Services: 
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
-            // 2. DI for the dataseeding
-            builder.Services.AddScoped<IDbInitializer,DbInitializer>();
+            // Core Serivices:
+            builder.Services.AddCoreServices();
 
-            //7. Custom Vaildation of request data
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                // func => return IActionResult and takes Action Context as parameter
-                options.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
-            });
-
-            //3. 
-            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-            // 4. 
-            builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
-
-            //5. 
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
             //............................................................
 
-            var app = builder.Build();
+            var app = builder.Build(); 
+            #endregion
 
-            // USe middle ware
-            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
-            // 3. Call the function for dataseeding
-            // Main returns 'Task' not void since has async function
-            await InitializeDbAsync(app);
+            #region Pipeline/Middleware
+            // Middleware 
+            app.CustomMiddleware();
+            await app.SeedDbAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -85,15 +64,8 @@ namespace E_Commerce
 
             app.Run();
 
+            #endregion
 
-            // Function to be able to call the dataseeding. before even making any request. INstead of clr creating it
-            async Task InitializeDbAsync(WebApplication app)
-            {
-                using var scope= app.Services.CreateScope();
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-                await dbInitializer.InitializeAync(); // call the method in the interface/ class you created
-
-            }
         }
     }
 }
