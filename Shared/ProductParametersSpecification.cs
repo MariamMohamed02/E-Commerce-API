@@ -10,6 +10,16 @@ namespace Shared
     {
         public int? TypedId { get; set; }
         public int? BrandId { get; set; }
-        public string? Sort {  get; set; }
+        public ProductSortOptions? Sort {  get; set; }
+
     }
+
+    public enum ProductSortOptions
+    {
+        NameAsc,
+        NameDesc,
+        PriceAsc,
+        PriceDesc,
+    }
+
 }

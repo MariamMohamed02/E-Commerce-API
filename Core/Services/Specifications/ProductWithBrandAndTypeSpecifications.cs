@@ -43,17 +43,17 @@ namespace Services.Specifications
         {
             AddInclude(product => product.ProductBrand);
             AddInclude(product => product.ProductType);
-            if (!string.IsNullOrWhiteSpace(parameters.Sort)) 
+            if (parameters.Sort is not null) 
             {
-                switch (parameters.Sort.ToLower().Trim())
+                switch (parameters.Sort)
                 {
-                    case "pricedesc":
+                    case ProductSortOptions.PriceDesc:
                         SetOrderByDescending(p => p.Price);
                         break;
-                    case "priceasc":
+                    case ProductSortOptions.PriceAsc:
                         SetOrderBy(p => p.Price);
                         break;
-                    case "namedesc":
+                    case ProductSortOptions.NameDesc:
                         SetOrderByDescending(p => p.Name);
                         break;
                     default:
