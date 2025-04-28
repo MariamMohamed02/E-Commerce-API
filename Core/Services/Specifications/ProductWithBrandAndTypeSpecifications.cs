@@ -62,6 +62,10 @@ namespace Services.Specifications
 
                 }
             }
+
+
+            // Pagination
+            ApplyPagination(parameters.PageIndex, parameters.PageSize);
         }
 
 
