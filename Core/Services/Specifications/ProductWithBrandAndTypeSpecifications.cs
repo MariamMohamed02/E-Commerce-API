@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Services.Specifications
 {
@@ -34,25 +35,25 @@ namespace Services.Specifications
         // Filter based on brandid. productid, both or none
         // To be able to use orderby, it has to be a collection
         // sort by price or by name (asc or desc)  -> 4 cases
-        public ProductWithBrandAndTypeSpecifications(string? sort , int? brandId, int? typeId)
+        public ProductWithBrandAndTypeSpecifications(ProductParametersSpecification parameters)
             : base(product=>
-            (!brandId.HasValue || product.BrandId == brandId.Value) &&
-            (!typeId.HasValue || product.TypeId== typeId.Value)
+            (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) &&
+            (!parameters.TypedId.HasValue || product.TypeId== parameters.TypedId.Value)
             )
         {
             AddInclude(product => product.ProductBrand);
             AddInclude(product => product.ProductType);
-            if (!string.IsNullOrWhiteSpace(sort)) 
+            if (parameters.Sort is not null) 
             {
-                switch (sort.ToLower().Trim())
+                switch (parameters.Sort)
                 {
-                    case "pricedesc":
+                    case ProductSortOptions.PriceDesc:
                         SetOrderByDescending(p => p.Price);
                         break;
-                    case "priceasc":
+                    case ProductSortOptions.PriceAsc:
                         SetOrderBy(p => p.Price);
                         break;
-                    case "namedesc":
+                    case ProductSortOptions.NameDesc:
                         SetOrderByDescending(p => p.Name);
                         break;
                     default:
@@ -61,6 +62,10 @@ namespace Services.Specifications
 
                 }
             }
+
+
+            // Pagination
+            ApplyPagination(parameters.PageIndex, parameters.PageSize);
         }
 
 

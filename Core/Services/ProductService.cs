@@ -5,6 +5,7 @@ global using Services.Abstraction;
 global using Shared;
 global using Domain.Entities;
 using Services.Specifications;
+using Shared.Dtos;
 
 namespace Services
 {
@@ -22,11 +23,24 @@ namespace Services
             return brandsResult;
         }
 
-        public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(string? sort, int? brandId, int? typeId)
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductParametersSpecification parameters)
         {
-            var products= await _unitOfWork.GetRepository<Product,int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications(sort,brandId,typeId));
-            var productsResult= _mapper.Map<IEnumerable<ProductResultDto>>(products);
-            return productsResult;
+            var products= await _unitOfWork.GetRepository<Product,int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications( parameters));
+            var totalCount = await _unitOfWork.GetRepository<Product, int>().CountAsync(new ProductCountSpecifications(parameters));
+
+            var productsResult = _mapper.Map<IEnumerable<ProductResultDto>>(products);
+            //return productsResult;
+
+            var result = new PaginatedResult<ProductResultDto>(
+                productsResult.Count(),
+               // parameters.PageSize,
+                parameters.PageIndex,
+                totalCount,
+                productsResult
+
+                );
+
+            return result;
         }
 
         public async Task<IEnumerable<TypeResultDto>> GetAllTypesAsync()

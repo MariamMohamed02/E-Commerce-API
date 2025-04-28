@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared;
+using Shared.Dtos;
 
 namespace Services.Abstraction
 {
     public interface IProductService
     {
         //Get all products
-        public Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(string? sort, int? brandId, int? typeId);
+        public Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductParametersSpecification parameters);
         // Get all brands
         public Task<IEnumerable<BrandResultDto>> GetAllBrandsAsync();
         // Get all types
