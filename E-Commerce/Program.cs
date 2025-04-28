@@ -1,6 +1,8 @@
 
 using Domain.Contracts;
+using E_Commerce.Factories;
 using E_Commerce.Middleware;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -36,6 +38,13 @@ namespace E_Commerce
 
             // 2. DI for the dataseeding
             builder.Services.AddScoped<IDbInitializer,DbInitializer>();
+
+            //7. Custom Vaildation of request data
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                // func => return IActionResult and takes Action Context as parameter
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
+            });
 
             //3. 
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
