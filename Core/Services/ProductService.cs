@@ -6,6 +6,7 @@ global using Shared;
 global using Domain.Entities;
 using Services.Specifications;
 using Shared.Dtos;
+using Domain.Exceptions;
 
 namespace Services
 {
@@ -54,8 +55,15 @@ namespace Services
         public async Task<ProductResultDto> GetProductByIdAsync(int id)
         {
             var product = await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(new ProductWithBrandAndTypeSpecifications(id));
-            var productResult = _mapper.Map<ProductResultDto>(product);
-            return productResult;
+            if (product is null)
+            {
+                throw new ProductNotFoundException(id);
+            }
+            else
+            {
+                var productResult = _mapper.Map<ProductResultDto>(product);
+                return productResult;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
 using System.Text.Json;
+using Domain.Exceptions;
 using Shared.ErrorModels;
 
 namespace E_Commerce.Middleware
@@ -38,6 +39,11 @@ namespace E_Commerce.Middleware
 
             //set status code to 500
             httpContext.Response.StatusCode=(int)HttpStatusCode.InternalServerError;  //500
+            httpContext.Response.StatusCode = ex switch
+            {
+                NotFoundException => (int) HttpStatusCode.NotFound,   //404
+                _ => (int)HttpStatusCode.InternalServerError  //500
+            };
 
             //return standard response
             var response = new ErrorDetails
