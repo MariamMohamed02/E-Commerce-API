@@ -4,6 +4,7 @@ global using Domain.Contracts;
 global using Services.Abstraction;
 global using Shared;
 global using Domain.Entities;
+using Services.Specifications;
 
 namespace Services
 {
@@ -23,7 +24,7 @@ namespace Services
 
         public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync()
         {
-            var products= await _unitOfWork.GetRepository<Product,int>().GetAllAsync();
+            var products= await _unitOfWork.GetRepository<Product,int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications());
             var productsResult= _mapper.Map<IEnumerable<ProductResultDto>>(products);
             return productsResult;
         }
@@ -38,7 +39,7 @@ namespace Services
 
         public async Task<ProductResultDto> GetProductByIdAsync(int id)
         {
-            var product = await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(id);
+            var product = await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(new ProductWithBrandAndTypeSpecifications(id));
             var productResult = _mapper.Map<ProductResultDto>(product);
             return productResult;
         }

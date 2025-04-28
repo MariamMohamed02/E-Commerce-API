@@ -23,7 +23,7 @@ namespace Services.Specifications
 
         // use to retrieve all products   (include brand/types)
 
-        public ProductWithBrandAndTypeSpecifications():base(null)
+        public ProductWithBrandAndTypeSpecifications(): base(null)
         {
             AddInclude(product => product.ProductBrand);
             AddInclude(product => product.ProductType);
