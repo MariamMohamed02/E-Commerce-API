@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace Shared.Dtos
 {
     //record ->used when you want to compare between two instances based on the value and not the refernce
     // record -> object is immutable

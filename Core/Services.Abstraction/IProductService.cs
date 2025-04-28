@@ -4,7 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Shared;
+using Shared.Dtos;
 
 namespace Services.Abstraction
 {

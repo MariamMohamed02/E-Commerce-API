@@ -5,6 +5,7 @@ global using Services.Abstraction;
 global using Shared;
 global using Domain.Entities;
 using Services.Specifications;
+using Shared.Dtos;
 
 namespace Services
 {
