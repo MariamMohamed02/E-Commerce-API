@@ -4,6 +4,7 @@ using Persistance.Data;
 using Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Persistance.Identity;
 
 namespace E_Commerce.Extensions
 {
@@ -15,6 +16,12 @@ namespace E_Commerce.Extensions
             services.AddDbContext<AppDbContext>(
                 options => {
                     options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"));
+                });
+
+            // Identity Db Conetxt
+            services.AddDbContext<IdentityAppDbContext>(
+                options => {
+                    options.UseSqlServer(configuration.GetConnectionString("IdentityConnectionString"));
                 });
 
             // 2. DI for the dataseeding
