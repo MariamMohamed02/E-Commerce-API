@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistance.Data.DataSeeding
 {
@@ -12,10 +13,14 @@ namespace Persistance.Data.DataSeeding
     public class DbInitializer : IDbInitializer
     {
         private readonly AppDbContext _dbContext;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager;
 
-        public DbInitializer(AppDbContext dbContext)
+        public DbInitializer(AppDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _dbContext = dbContext;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
         public async Task InitializeAync()
         {
@@ -72,6 +77,49 @@ namespace Persistance.Data.DataSeeding
             catch (Exception ex) {
 
             }
+
+        }
+
+        public async Task InitializeIdentityAsync()
+        {
+            // seed roles
+            if (!_roleManager.Roles.Any())
+            {
+                // Admin, SuperAdmin
+               await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+
+            }
+            //seed users
+            
+            if (!_userManager.Users.Any())
+            {
+                var adminUser = new User()
+                {
+                    DisplayName="Admin",
+                    UserName="Admin",
+                    Email="Admin@gmail.com",
+                    PhoneNumber="01013145678"
+                };
+
+                var superAdminUser = new User()
+                {
+                    DisplayName = "SuperAdmin",
+                    UserName = "SuperAdmin",
+                    Email = "SuperAdmin@gmail.com",
+                    PhoneNumber = "01013145678"
+                };
+
+                await _userManager.CreateAsync(adminUser, "P@ssw0rd");
+                await _userManager.CreateAsync(superAdminUser, "P@ssw0rd@");
+
+
+                // assign to each user a role
+                await _userManager.AddToRoleAsync(adminUser, "Admin");
+                await _userManager.AddToRoleAsync(superAdminUser, "SuperAdmin");
+            }
+
+
 
         }
     }
