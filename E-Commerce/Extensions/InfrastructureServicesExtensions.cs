@@ -16,9 +16,11 @@ namespace E_Commerce.Extensions
 
             // 1.Connect to Database and allow DI for the DbContext
             services.AddDbContext<AppDbContext>(
-                options => {
+                options =>
+                {
                     options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"));
                 });
+
 
             // Identity Db Conetxt
             services.AddDbContext<IdentityAppDbContext>(
