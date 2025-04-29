@@ -14,6 +14,7 @@ namespace E_Commerce.Extensions
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await dbInitializer.InitializeAync(); // call the method in the interface/ class you created
+            await dbInitializer.InitializeIdentityAsync();
             return app;
         }
 
