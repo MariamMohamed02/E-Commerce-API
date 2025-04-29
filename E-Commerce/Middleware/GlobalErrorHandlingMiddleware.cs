@@ -53,24 +53,38 @@ namespace E_Commerce.Middleware
 
             //set status code to 500
             httpContext.Response.StatusCode=(int)HttpStatusCode.InternalServerError;  //500
-            httpContext.Response.StatusCode = ex switch
-            {
-                NotFoundException => (int) HttpStatusCode.NotFound,   //404
-                UnauthorizedException => (int) HttpStatusCode.Unauthorized,  //401
-                _ => (int)HttpStatusCode.InternalServerError  //500
-            };
 
-            //return standard response
             var response = new ErrorDetails
             {
-                StatusCode = httpContext.Response.StatusCode,
                 ErrorMessage = ex.Message,
-            }.ToString();
+            };
+            httpContext.Response.StatusCode = ex switch
+            {
+                NotFoundException => (int)HttpStatusCode.NotFound,   //404
+                UnauthorizedException => (int)HttpStatusCode.Unauthorized,  //401
+                ValidationException validationException => HandleValidationException(validationException, response),
+                _ => (int)HttpStatusCode.InternalServerError  //500
+            };
+            response.StatusCode=httpContext.Response.StatusCode;
+
+            //return standard response
+            //var response = new ErrorDetails
+            //{
+
+            //    StatusCode = httpContext.Response.StatusCode,
+            //    ErrorMessage = ex.Message,
+            //}.ToString();
 
             // Serialization-> to convert from c# object to json (override the tostring in the errordetails)
            
-            await httpContext.Response.WriteAsync(response);
+            await httpContext.Response.WriteAsync(response.ToString());
 
+        }
+
+        private int HandleValidationException(ValidationException validationException, ErrorDetails response)
+        {
+            response.Errors=validationException.Errors;
+            return (int)HttpStatusCode.BadRequest;
         }
     }
 }
