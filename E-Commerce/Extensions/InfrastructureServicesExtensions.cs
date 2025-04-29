@@ -5,6 +5,8 @@ using Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Persistance.Identity;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities;
 
 namespace E_Commerce.Extensions
 {
@@ -26,7 +28,15 @@ namespace E_Commerce.Extensions
 
             // 2. DI for the dataseeding
             services.AddScoped<IDbInitializer, DbInitializer>();
-
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<IdentityAppDbContext>();
+                
 
             //3. 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
