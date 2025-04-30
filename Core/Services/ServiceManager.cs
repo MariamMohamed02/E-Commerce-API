@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace Services
 {
@@ -15,10 +16,11 @@ namespace Services
 
 
 
-        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository,  UserManager<User> userManager) {
+        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository,  UserManager<User> userManager, IOptions<JwtOptions> options)
+        {
             _productService=new Lazy<IProductService>(()=>new ProductService(unitOfWork,mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
-            _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager));
+            _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager,options));
 
         }
         public IProductService ProductService => _productService.Value;

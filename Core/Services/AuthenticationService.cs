@@ -79,7 +79,7 @@ namespace Services
                 issuer: jwtOptions.Issuer,
                 audience: jwtOptions.Audience,
                 claims: claims,
-                DateTime.UtcNow.AddDays(jwtOptions.ExpirationInDays),
+                expires: DateTime.UtcNow.AddDays(jwtOptions.ExpirationInDays),
                 signingCredentials: signinCreds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
