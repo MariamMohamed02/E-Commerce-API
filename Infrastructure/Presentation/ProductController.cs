@@ -43,9 +43,7 @@ namespace Presentation
 
 
         // for swagger to display all scenarios and not only the 200 ok
-        [ProducesResponseType(typeof(ErrorDetails),(int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ValidationErrorResponse), (int)HttpStatusCode.BadRequest)]
+        
         [ProducesResponseType(typeof(ProductResultDto), (int)HttpStatusCode.OK)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductResultDto>> GetProduct(int id)

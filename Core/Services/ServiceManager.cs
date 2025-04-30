@@ -15,7 +15,7 @@ namespace Services
 
 
 
-        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository, IAuthenticationService authenticationService, UserManager<User> userManager) {
+        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository,  UserManager<User> userManager) {
             _productService=new Lazy<IProductService>(()=>new ProductService(unitOfWork,mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
             _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager));
