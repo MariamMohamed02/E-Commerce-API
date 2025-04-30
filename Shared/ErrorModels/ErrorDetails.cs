@@ -14,5 +14,8 @@ namespace Shared.ErrorModels
 
         public override string ToString()=> JsonSerializer.Serialize(this);
 
+        //Property added for the VAlidationException to show the error messgae
+        public IEnumerable<string> Errors { get; set; }
+
     }
 }

@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Contracts
+namespace Shared.Dtos
 {
-    public interface IDbInitializer
+    public record UserResultDto(string DisplayName, string Token, string Email)
     {
-        Task InitializeAync();
 
-
-        Task InitializeIdentityAsync();
     }
 }
