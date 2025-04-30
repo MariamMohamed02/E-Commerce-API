@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
 using Shared;
@@ -13,7 +14,7 @@ using Shared.ErrorModels;
 namespace Presentation
 {
 
-    
+    [Authorize]
     public class ProductController(IServiceManager _serviceManager): ApiController
     {
         [HttpGet]
