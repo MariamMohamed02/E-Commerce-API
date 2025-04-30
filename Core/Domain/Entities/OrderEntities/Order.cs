@@ -11,6 +11,16 @@ namespace Domain.Entities.OrderEntities
 {
     public class Order: BaseEntity<Guid>
     {
+        public Order(string userEmail, ShippingAddress shippingAddress, ICollection<OrderItem> orderItems, DeliveryMethod deliveryMethod,  decimal subtotal)
+        {
+            UserEmail = userEmail;
+            ShippingAddress = shippingAddress;
+            OrderItems = orderItems;
+            DeliveryMethod = deliveryMethod;
+            Subtotal = subtotal;
+           
+        }
+
         public string UserEmail { get; set; }
 
         public ShippingAddress ShippingAddress { get; set; }
