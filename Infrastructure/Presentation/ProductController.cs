@@ -13,9 +13,8 @@ using Shared.ErrorModels;
 namespace Presentation
 {
 
-    [ApiController]
-    [Route("/api/[controller]")]
-    public class ProductController(IServiceManager _serviceManager): ControllerBase
+    
+    public class ProductController(IServiceManager _serviceManager): ApiController
     {
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery]ProductSpecificationParameters parameters)

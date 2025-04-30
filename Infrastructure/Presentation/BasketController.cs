@@ -9,9 +9,7 @@ using Shared.Dtos;
 
 namespace Presentation
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BasketController(IServiceManager _serviceManager): ControllerBase
+    public class BasketController(IServiceManager _serviceManager): ApiController
     {
 
         [HttpGet("{id}")]
