@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.OrderEntities;
 using Domain.Exceptions;
+using Services.Specifications;
 using Shared.OrderModels;
 using ShippingAddress = Domain.Entities.OrderEntities.Address;
 
@@ -56,19 +57,22 @@ namespace Services
             return new OrderItem(productInOrderItem, item.Quantity, product.Price);
         }
 
-        public Task<IEnumerable<OrderResult>> GetAllOrdersByEmailAsync(string userEmail)
+        public async Task<IEnumerable<OrderResult>> GetAllOrdersByEmailAsync(string userEmail)
         {
-            throw new NotImplementedException();
+            var orders = await unitOfWork.GetRepository<Order, Guid>().GetAllAsync(new OrderWithIncludesSpecifications(userEmail));
+            return mapper.Map<IEnumerable<OrderResult>>(orders);
         }
 
-        public Task<IEnumerable<DeliveryMethodResult>> GetDeliveryMethodsAsync()
+        public async Task<IEnumerable<DeliveryMethodResult>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
+            var methods= await unitOfWork.GetRepository<DeliveryMethod,int>().GetAllAsync();
+            return mapper.Map<IEnumerable<DeliveryMethodResult>>(methods);
         }
 
-        public Task<OrderResult> GetOrderByIdAsync(Guid id)
+        public async Task<OrderResult> GetOrderByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var order = await unitOfWork.GetRepository<Order,Guid>().GetByIdAsync(new OrderWithIncludesSpecifications(id))?? throw new OrderNotFoundException(id);
+            return mapper.Map<OrderResult>(order);
         }
     }
 }
