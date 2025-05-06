@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
+using Domain.Entities.OrderEntities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Persistance.Data.DataSeeding
@@ -27,7 +28,7 @@ namespace Persistance.Data.DataSeeding
             //1. Check if we have a bulding migration or not
             try
             {
-                if (_dbContext.Database.GetPendingMigrations().Any()) {
+               // if (_dbContext.Database.GetPendingMigrations().Any()) {
                     // Migrate any building migrations
                     await _dbContext.Database.MigrateAsync();
                     // check if product,brand or type has no data in databse, then start seeding
@@ -68,7 +69,22 @@ namespace Persistance.Data.DataSeeding
                             await _dbContext.SaveChangesAsync();
                         }
                     }
-                }
+
+
+                    if (!_dbContext.DeliveryMethods.Any())
+                    // if(_dbContext.Products.Count() == 0)
+                    {
+                        //D:\ROUTE\Route\Backend\API Project\E-Commerce\Infrastructure\Persistance\Data\DataSeeding\types.json
+                        var methodsData = await File.ReadAllTextAsync(@"..\Infrastructure\Persistance\Data\DataSeeding\delivery.json");
+                    // convert fron json to c# object (deserlilzation)
+                        var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(methodsData);
+                        if (methods is not null && methods.Any())
+                        {
+                            await _dbContext.AddRangeAsync(methods);
+                            await _dbContext.SaveChangesAsync();
+                        }
+                    }
+               // }
                 
 
             

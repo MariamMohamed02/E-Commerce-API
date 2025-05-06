@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Domain.Entities.OrderEntities;
 using Shared.OrderModels;
 using ShippingAddress = Domain.Entities.OrderEntities.Address;
+using Address = Domain.Entities.Address;
 
 namespace Services.MappingProfiles
 {
@@ -15,7 +16,8 @@ namespace Services.MappingProfiles
 
             //  follow that order
 
-            CreateMap<ShippingAddress, AddressDto>();
+            CreateMap<ShippingAddress, AddressDto>().ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();   
             CreateMap<DeliveryMethod,DeliveryMethodResult>();   
 
             CreateMap<OrderItem, OrderItemDto>()
