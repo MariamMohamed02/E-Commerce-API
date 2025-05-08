@@ -22,7 +22,7 @@ namespace Services
         {
             _productService=new Lazy<IProductService>(()=>new ProductService(unitOfWork,mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
-            _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager,options));
+            _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager,mapper,options));
             _orderService= new Lazy<IOrderService>(()=> new OrderService(mapper,basketRepository,unitOfWork));
 
         }
