@@ -9,7 +9,7 @@ using Shared.Dtos;
 
 namespace Presentation
 {
-    public class PaymentController(IServiceManager serviceManager ): ApiController
+    public class PaymentsController(IServiceManager serviceManager ): ApiController
     {
         [HttpPost("{basketId}")]
         public async Task<ActionResult<BasketDto>> CreateOrUpdatePaymentIntent(string basketId)
