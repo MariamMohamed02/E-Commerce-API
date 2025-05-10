@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Services
@@ -14,16 +15,18 @@ namespace Services
         private readonly Lazy<IBasketService> _basketService;
         private readonly Lazy<IAuthenticationService> _authenicationService;
         private readonly Lazy<IOrderService> _orderService;
+        private readonly Lazy<IPaymentService> _paymentService;
 
 
 
 
-        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository,  UserManager<User> userManager, IOptions<JwtOptions> options )
+        public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper, IBasketRepository basketRepository,  UserManager<User> userManager, IOptions<JwtOptions> options, IConfiguration configuration)
         {
             _productService=new Lazy<IProductService>(()=>new ProductService(unitOfWork,mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
             _authenicationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager,mapper,options));
             _orderService= new Lazy<IOrderService>(()=> new OrderService(mapper,basketRepository,unitOfWork));
+            _paymentService = new Lazy<IPaymentService>(() => new PaymentService(basketRepository, unitOfWork, mapper, configuration));
 
         }
         public IProductService ProductService => _productService.Value;
@@ -33,5 +36,7 @@ namespace Services
         public IAuthenticationService AuthenticationService => _authenicationService.Value;
 
         public IOrderService OrderService => _orderService.Value;
+
+        public IPaymentService PaymentService => _paymentService.Value;
     }
 }
