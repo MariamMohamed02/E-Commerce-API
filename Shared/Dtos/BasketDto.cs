@@ -11,7 +11,14 @@ namespace Shared.Dtos
 
         // init -> to make the record immutable
         public string Id { get; init; }
-        public IEnumerable<BasketItemDto> Items { get; set; }
+        public IEnumerable<BasketItemDto> Items { get; init; }
+
+        // For Payment
+        public string? PaymentIntentId { get; init; }
+        public string? ClientSecret { get; init; }
+        public decimal? ShippingPrice { get; init; }
+        public int? DeliveryMethodId { get; init; }
+
 
     }
 }

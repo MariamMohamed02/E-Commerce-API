@@ -12,7 +12,7 @@ namespace Persistance.Data.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.OwnsOne(o => o.ShippingAddress, s => s.WithOwner());
-            builder.HasMany(o => o.OrderItems).WithOne();
+            builder.HasMany(o => o.OrderItems).WithOne().OnDelete(DeleteBehavior.Cascade);
 
             // send to db as string and return from it as an enum
             builder.Property(o => o.PaymentStatus).HasConversion(paymentStatus => paymentStatus.ToString(),
