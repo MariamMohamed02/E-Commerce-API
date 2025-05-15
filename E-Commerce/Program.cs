@@ -53,7 +53,8 @@ namespace E_Commerce
 
             // 6. -- To Use the Images --
             app.UseStaticFiles();
-
+            //----
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 

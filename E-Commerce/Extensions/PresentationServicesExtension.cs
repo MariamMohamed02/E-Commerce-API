@@ -12,6 +12,20 @@ namespace E_Commerce.Extensions
 
             // -------------modeified here to be able to use the controllers in the entire solutin and not just the API project
             services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
+            // ADD CORS for angular project
+            services.AddCors(options =>
+           { options.AddPolicy("CorsPolicy", builder =>
+           {
+               builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+           });
+
+
+           });
+            
+
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(option =>
