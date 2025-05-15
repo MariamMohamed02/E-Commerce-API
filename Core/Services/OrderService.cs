@@ -19,7 +19,7 @@ namespace Services
             // get price from the database since frontend can change it in the inspect
 
             // Shipping Address
-            var shippingAddress =mapper.Map<ShippingAddress>(request.ShippingAddress );
+            var shippingAddress =mapper.Map<ShippingAddress>(request.ShipToAddress );
             // OrderItems => Basket{BasketId} => BasketItems => OrderItems
             var basket = await basketRepository.GetBasketAsync(request.BasketId) ?? throw new BasketNotFoundException(request.BasketId);
             var orderItems = new List<OrderItem>();

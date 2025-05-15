@@ -14,7 +14,7 @@ using Shared.ErrorModels;
 namespace Presentation
 {
 
-    [Authorize]
+   // [Authorize]
     public class ProductController(IServiceManager _serviceManager): ApiController
     {
         [HttpGet]
