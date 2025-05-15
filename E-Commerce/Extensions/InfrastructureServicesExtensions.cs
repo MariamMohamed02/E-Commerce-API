@@ -49,6 +49,8 @@ namespace E_Commerce.Extensions
 
             //
             services.AddScoped<IBasketRepository, BasketRepository>();
+            // 
+            services.AddScoped<ICacheRepository,CacheRepository>();
 
             // Connection MUltiplexer 
             services.AddSingleton<IConnectionMultiplexer>(services => ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
