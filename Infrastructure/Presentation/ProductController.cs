@@ -17,6 +17,7 @@ namespace Presentation
    // [Authorize]
     public class ProductController(IServiceManager _serviceManager): ApiController
     {
+        [RedisCache]
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery]ProductSpecificationParameters parameters)
         {
